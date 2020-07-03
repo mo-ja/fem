@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   ife.read();
   writer exodus(ofe_dir.string() +"/" +ife_path.stem().string()+".exo");
   exodus.write_initial_state();
-
+  
   
   
   return 0;

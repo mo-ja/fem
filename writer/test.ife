@@ -1,0 +1,18 @@
+elastic, mat001, 200e9, 0.3;
+
+node, 1, 0, 0;
+node, 2, 1.5, 0.1;
+node, 3, 0, 1;
+node, 4, 1, 1;
+node, 5, 2, 0;
+node, 6, 2, 1;
+
+tria, mat001, 1, 1, 2, 3;
+tria, mat001, 2, 3, 2, 4;
+tria, mat001, 3, 4, 2, 5;
+tria, mat001, 4, 5, 6, 4;
+
+displacement, 1, 1, 0;
+displacement, 2, 1, 0;
+displacement, 5, 1, 1;
+displacement, 6, 1, 1;

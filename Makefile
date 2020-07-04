@@ -9,7 +9,8 @@ TARGET = fem.bin
 ifeq ($(COMPILER), icpc)
 	include $(HOME)/local/cpplapack/makefiles/Makefile.icpc
 else
-	include $(HOME)/local/cpplapack/makefiles/Makefile.g++
+	#include $(HOME)/local/cpplapack/makefiles/Makefile.icpc
+	include	./Makefile.g++
 endif
 
 ###############################################################################

@@ -1,0 +1,268 @@
+\documentclass{jarticle}
+\usepackage[top=30truemm,bottom=30truemm,left=25truemm,right=25truemm]{geometry}
+\usepackage{amsmath,amssymb}%amsmath is for align and amssymb is for some symbols such as \square 
+\usepackage{bm} % for bm
+\usepackage{graphicx} %for graphics
+
+
+\begin{document}
+\section{ポアソン方程式}
+場の物理量$u$のポアソン方程式は、アインシュタインの総和規約を用いて下記のように示すことができる。
+\begin{align}
+  ku_{,ii} + Q = 0  \qquad \mathrm{in} \quad \Omega \label{eq-1}\\
+  u=\bar{u}  \qquad \mathrm{in} \quad \Gamma_u \label{eq-2}\\
+\end{align}
+ただし$k$は問題固有の定数を、$Q$はソース項を、$\square_{,i}$は$\square$の$i$方向の微分を、$\square_{,ii}$は$\square$の$i$方向の2階微分を、$\Omega$は計算領域全体を、$\Gamma$は$u$の境界値$\bar{u}$が規定されている境界を表す。
+ここでは熱伝導方程式を題材にし、$u$をその地点における温度、$k$は熱伝導率、$Q$は発熱項を表すとする。
+
+\begin{figure}[!th]
+  \centering
+  \includegraphics[width=100mm, bb= 0.000000 0.000000 960.000000 540.000000]{figure/powerpoint/Outline.pdf}
+  \caption{Outline of boundary value problem. }
+  
+\end{figure}
+
+\section{有限要素分割による重み付き残差法}
+$u$を次のように級数展開して近似することを考える。
+\begin{align}
+  \hat{u} = \sum_{P\in\mathbb{N}}u^PN^P = u^PN^P\label{eq-shapefunction}
+\end{align}
+ただし、$\mathbb{N}$は有限要素分割された$\Omega$の節点全体の集合を、$\square^P$は節点$P$における物理量$\square$の値を、$N$は形状関数を表す。
+中央から右辺への式変形はアインシュタインの総和規約を意味する。
+$\hat{u}$は式(\ref{eq-2})の境界条件を満たすように節点$P$におけるに注意する。
+残差$R$を次のように定義する。
+\begin{align}
+  R:=ku^PN^P_{, ii} + Q
+\end{align}
+残差は、式(\ref{eq-1})に$\hat{u}$を代入したときの左辺に相当することに注意する。
+$u^P$を適当に決定したとき、残差$R$が空間$\Omega$全域で平均的に小さな値となっていれば$\hat{u}$がポアソン方程式の解の良い近似となっている。
+残差が十分小さいことを意味する式を$\|\mathbb{N}\|$本用意することで、$\|\mathbb{N}\|$個の未知数$u^P$を決定することができる。
+重み関数$w_i(1\leq i\leq\|\mathbb{N}\|)$を残差$R$に乗じ、$\Omega$全域に渡って積分することで、下記の$\|\mathbb{N}\|$個の連立方程式を得ることができる。
+\begin{align}
+  \int kw_iu^{P}N^P_{, ss}\mathrm{d}\Omega &= -\int w_i Q\mathrm{d}\Omega\\
+  u^j\int kw_iN^j_{, ss}\mathrm{d}\Omega &= -\int w_i Q\mathrm{d}\Omega\label{eq-3}\\  
+\end{align}
+以上のように、重み関数に対し残差が小さくなるように$u^P$を決定する手法を重み付き残差法と呼ぶ。
+特に重み関数を$w_i$を形状関数と等しくなるようにそれぞれ選ぶとき(すなわち$w_i = N^i(1\leq i\leq\|\mathbb{N}\|)$とするとき)、Galerkin法と呼ばれる。
+部分積分を用いることで式(\ref{eq-3})の左辺は
+\begin{align}
+  \int kN^iN^j_{, ss}\mathrm{d}\Omega
+  &= \int kN^iN^j_{, s}n_s\mathrm{d}\Gamma - \int kN^i_{,s}N^j_{,s}\mathrm{d}\Omega\\ 
+\end{align}
+となるので、式(\ref{eq-3})は
+\begin{align}
+　u^j\int kN^i_{,s}N^j_{,s}\mathrm{d}\Omega = \int kN^iu^jN^j_{, s}n_s\mathrm{d}\Gamma + \int w_i Q\mathrm{d}\Omega
+\end{align}
+と表される。
+式(\ref{})を考慮すれば、右辺第一項は、
+\begin{align}
+  \int kN^iu^jN^j_{, s}n_s\mathrm{d}\Gamma = \int_{\Gamma_q} N^i\bar{q}\mathrm{d}\Gamma
+\end{align}
+となる。
+最終的に式(\ref{eq-3})は
+\begin{align}
+  K_{ij}u^j &= q_i + F_i\\
+\end{align}
+と表すことができる。ただし、
+\begin{align}
+  K_{ij} &= \int kN^i_{,s}N^j_{,s}\mathrm{d}\Omega\\
+  q_i &= \int_{\Gamma_q} N^i\bar{q}\mathrm{d}\Gamma\\
+  F_i &= \int w_i Q\mathrm{d}\Omega 
+\end{align}
+節点$P$の形状関数$N^P$は下記の特性を満たす。
+\begin{align}
+  N^P = 1  ~~~\mathrm{at} ~\bm{x}^P\\
+  0\leq N^P \leq 1 ~~~\mathrm{in}~~\Omega_e, ~~e \in \mathbb{E}_P\\
+  N^P=0 ~~~\mathrm{in}~~\Omega/\Omega_e, ~~e \in \mathbb{E}_P
+\end{align}
+ただし、$\bm{x}^P$は節点$P$の位置ベクトルを、$\Omega_e$は要素$e$の内部及び境界上を、$\mathbb{E}_P$は節点$P$に隣接する要素の集合を表す。
+上記の性質から、$K_ij$は
+\begin{align}
+  K_{ij}
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_j} \int kN^i_{,s}N^j_{,s}\mathrm{d}\Omega_e\\
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_j} K^e_{ij}
+\end{align}
+のように、節点$i$および$j$に隣接する要素毎の$K^e_{ij}$の総和の形に書き改めることができる。
+\section{形状関数と数値積分}
+\begin{figure}[!th]
+  \centering
+  \includegraphics[width=150mm, bb= 0.000000 0.000000 960.000000 540.000000]{figure/powerpoint/tet4.pdf}
+  \caption{Outline of boundary value problem. }
+  \end{figure}
+\subsection{四面体要素の自然座標}
+四面体要素の場合、一般に形状関数として体積座標が用いられる。
+$\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4$からなる四面体の内部および表面上の点$\bm{x}$を4つの体積座標$\xi, \eta, \zeta,\omega$で表すことを考える。
+各体積座標は、$\bm{x}$と四面体の各面が作る体積と四面体の体積の比を意味する。
+すなわち、
+\begin{align}
+  \xi = \frac{V(\bm{x}, \bm{x}_2, \bm{x}_3, \bm{x}_4)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
+  \eta = \frac{V(\bm{x}, \bm{x}_3, \bm{x}_4, \bm{x}_1)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
+  \zeta = \frac{V(\bm{x}, \bm{x}_4, \bm{x}_1, \bm{x}_2)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
+  \omega = \frac{V(\bm{x}, \bm{x}_1, \bm{x}_2, \bm{x}_3)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}
+\end{align}
+ただし、$V(\bm{a}, \bm{b}, \bm{c}, \bm{d})$は4点$\bm{a},\bm{b},\bm{c},\bm{d}$で作られる四面体の体積を表す。
+図\ref{fig-2}に示す概念からわかるように、4つの体積座標はそれぞれ独立ではなく、$\xi+\eta+\zeta+\omega=1$を満たす。
+ところで、$\bm{a}-\bm{d},\bm{c}-\bm{d},\bm{c}-\bm{d}$がこの順に右手系をなすとき、四面体の体積$V(\bm{a}, \bm{b}, \bm{c}, \bm{d})$は、次式のようなスカラー3重積で表すことができる。
+\begin{align}
+  V(\bm{a}, \bm{b}, \bm{c}, \bm{d}) = \frac{1}{6}\varepsilon_{ijk}(a_i - d_i)(b_j-d_j)(c_k - d_k)
+\end{align}
+$a_i$の微分を考えると、
+\begin{align}
+  \frac{\partial V}{\partial a_i}(\bm{a}, \bm{b}, \bm{c}, \bm{d}) = \frac{1}{6}\varepsilon_{ijk}(b_j-d_j)(c_k - d_k)  
+\end{align}
+と表すことができるので、自然座標の空間微分は
+\begin{align}
+  \xi_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{2j} - x_{4j})(x_{3k} - x_{4k})\\
+  \eta_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{3j} - x_{1j})(x_{4k} - x_{1k})\\
+  \zeta_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{4j} - x_{2j})(x_{1k} - x_{2k})\\
+\end{align}
+となる。従属変数である$\omega$は、その対称性から明らかに
+\begin{align}
+  \omega_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{1j} - x_{3j})(x_{2k} - x_{3k})
+\end{align}
+\subsection{四面体要素の形状関数}
+本小節の目的は、被積分関数および積分変数を自然座標$\xi, \eta, \zeta$および節点座標$\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4$で表すことにある。
+\subsubsection{四面体要素1次要素の形状関数}
+四面体1次要素においては、各頂点の形状関数を次のように定める。
+\begin{align}
+  N^1 &= \xi\\
+  N^2 &= \eta\\
+  N^3 &= \zeta\\
+  N^4 &= 1 - \xi - \eta - \zeta
+\end{align}
+したがって、これらの空間微分$N^i_{, j}$はそれぞれ次のように計算される。
+\begin{align}
+  N^1_j &= \xi_{,j}\\
+  N^2_j &= \eta_{,j}\\
+  N^3_j &= \zeta_{,j}\\
+  N^4_j &= \omega_{,j}
+\end{align}
+$V$は四面体の体積である。
+形状関数$N$の空間微分が$\bm{x}$によらないことから、形状関数は$\bm{x}$についての1次式であることがわかる。
+\subsubsection{四面体要素2次要素の形状関数}
+四面体1次要素においては、各頂点の形状関数を次のように定める。
+\begin{align}
+  N^1 &= \xi(2\xi-1)\\
+  N^2 &= \eta(2\eta-1)\\
+  N^3 &= \zeta(2\zeta-1)\\
+  N^4 &= \omega(2\omega-1)\\
+  N^5 &= 4\xi\eta\\
+  N^6 &= 4\xi\zeta\\
+  N^7 &= 4\xi\omega\\
+  N^8 &= 4\eta\zeta\\
+  N^9 &= 4\eta\omega\\
+  N^{10} &= 4\zeta\omega
+\end{align}
+したがって、これらの空間微分$N^i_{, j}$はそれぞれ次のように計算される。
+\begin{align}
+  N^1_{,j} &= 4\xi_{,j}-1\\
+  N^2_{,j} &= 4\eta_{,j}-1\\
+  N^3_{,j} &= 4\zeta_{,j}-1\\
+  N^4_{,j} &= 4\omega_{,j}-1\\
+  N^5_{,j} &= 4(\xi_{,j}\eta+\xi\eta_{,j})\\
+  N^6_{,j} &= 4(\xi_{,j}\zeta+\xi\zeta_{,j})\\
+  N^7_{,j} &= 4(\xi_{,j}\omega+\xi\omega_{,j})\\
+  N^8_{,j} &= 4(\eta_{,j}\zeta+\eta\zeta_{,j})\\
+  N^9_{,j} &= 4(\eta_{,j}\omega+\eta\omega_{,j})\\
+  N^{10}_{,j} &= 4(\zeta_{,j}\omega+\zeta\omega_{,j})
+\end{align}
+形状関数$\xi,\eta,\zeta,\omega$は$\bm{x}$の1次式であることから、2次要素の形状関数は$\bm{x}$の2次式になっていることがわかる。
+\subsection{四面体要素の数値積分}
+微小体積要素$\mathrm{d}\Omega$と自然座標空間における微小体積$\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta$の関係は
+\begin{align}
+  \mathrm{d}\Omega
+  &= \left|\frac{\partial (x_1x_2x_3)}{\partial (\xi\eta\zeta)}\right|\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+  &= \left|\frac{\partial (\xi\eta\zeta)}{\partial (x_1x_2x_3)}\right|^{-1}\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+  &= \left|\varepsilon_{lmn}\xi_{,l}\eta_{,m}\zeta_{,n}\right|^{-1}\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta
+\end{align}
+で示される。
+ここで、要素$e$の内部及び表面上の領域積分$S$は下記のように$\xi, \eta, \zeta$のみの形で表せる。
+\begin{align}
+  S&:=\int_{\Omega^e}f(\bm{x})\mathrm{d}\Omega\\
+  &=\int_{\Omega^e}f(N^P\bm{x}^P)\left|\frac{\partial (x_1x_2x_3)}{\partial (\xi\eta\zeta)}\right|\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+  &=\int_{\Omega^e}f(N^P\bm{x}^P)\left|\varepsilon_{lmn}\xi_{,l}\eta_{,m}\zeta_{,n}\right|^{-1}\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta  \\
+  &=\int_{0}^1\mathrm{d}\xi\int_{0}^{1-\xi}\mathrm{d}\eta\int_{0}^{1-\xi-\eta}f(N^P\bm{x}^P)\left|\varepsilon_{lmn}\xi_{,l}\eta_{,m}\zeta_{,n}\right|^{-1}\mathrm{d}\zeta 
+\end{align}
+$g(\xi,\eta,\zeta):=f(N^Px^P)$とおくと
+\subsection{六面体要素}
+\subsubsection{六面体1次要素の自然座標と形状関数}
+形状関数$N^P$は式\ref{eq-shapefunction}で示すように物理量$u$と節点量$u^P$を関係づける基底として定義された関数である。
+この形状関数を用いて自然座標$\{\xi, \eta, \zeta\}$と$\bm{x}$を関係づけることを考える。
+式\ref{eq-shapefunction}に倣って、$\bm{x}$を節点座標$\bm{x}^i~(1\leq i\leq 8)$と形状関数$N^i~(1\leq i\leq 8)$で次のように表す。
+\begin{align}
+  \bm{x} = \sum_{i=1}^8\bm{x}^iN^i = \bm{x}^iN^i
+\end{align}
+形状関数を自然座標の関数として、下記のように定義する。
+\begin{align}
+  N^1 = \frac{1}{8}(1-\xi)(1-\eta)(1-\zeta)\\
+  N^2 = \frac{1}{8}(1+\xi)(1-\eta)(1-\zeta)\\
+  N^3 = \frac{1}{8}(1+\xi)(1+\eta)(1-\zeta)\\
+  N^4 = \frac{1}{8}(1-\xi)(1+\eta)(1-\zeta)\\
+  N^5 = \frac{1}{8}(1-\xi)(1-\eta)(1+\zeta)\\
+  N^6 = \frac{1}{8}(1+\xi)(1-\eta)(1+\zeta)\\
+  N^7 = \frac{1}{8}(1+\xi)(1+\eta)(1+\zeta)\\
+  N^8 = \frac{1}{8}(1-\xi)(1+\eta)(1+\zeta)
+\end{align}
+四面体要素の場合、$\bm{x}$および頂点座標$\bm{x}^i~(1\leq i\leq 4)$を用いて自然座標$\{\xi, \eta, \zeta\}$を陽に表した。
+逆に六面体要素においては、自然座標$\{\xi, \eta, \zeta\}$および頂点座標$\bm{x}^i~(1\leq i\leq 8)$を用いて$\bm{x}$を陽に表している点に注意されたい。
+式\ref{}を$\{\xi, \eta, \zeta\}$について解けば四面体要素の場合と同様に、$\bm{x}$および頂点座標$\bm{x}^i~(1\leq i\leq 4)$から自然座標$\{\xi, \eta, \zeta\}$を算出することができる。
+ただし、一般に式\ref{}は非線形方程式であるので、自然座標の算出にはNewton-Raphson法といった非線形方程式の解法を要する。
+式\ref{}のように、形状関数を用いて内部の座標を表す要素のことをアイソパラメトリック要素と呼ぶ。
+ちなみに、四面体要素で定義した形状関数もアイソパラメトリック要素であることが容易に確かめられる。
+\subsubsection{六面体2次要素の自然座標と形状関数}
+形状関数$N^P$は式\ref{eq-shapefunction}で示すように物理量$u$と節点量$u^P$を関係づける基底として定義された関数である。
+この形状関数を用いて自然座標$\{\xi, \eta, \zeta\}$と$\bm{x}$を関係づけることを考える。
+式\ref{eq-shapefunction}に倣って、$\bm{x}$を節点座標$\bm{x}^i~(1\leq i\leq 20)$と形状関数$N^i~(1\leq i\leq 20)$で次のように表す。
+\begin{align}
+  \bm{x} = \sum_{i=1}^{20}\bm{x}^iN^i = \bm{x}^iN^i
+\end{align}
+形状関数を自然座標の関数として、下記のように定義する。
+\begin{align}
+  N^1 = \frac{1}{8}(1-\xi)(1-\eta)(1-\zeta)\\
+  N^2 = \frac{1}{8}(1+\xi)(1-\eta)(1-\zeta)\\
+  N^3 = \frac{1}{8}(1+\xi)(1+\eta)(1-\zeta)\\
+  N^4 = \frac{1}{8}(1-\xi)(1+\eta)(1-\zeta)\\
+  N^5 = \frac{1}{8}(1-\xi)(1-\eta)(1+\zeta)\\
+  N^6 = \frac{1}{8}(1+\xi)(1-\eta)(1+\zeta)\\
+  N^7 = \frac{1}{8}(1+\xi)(1+\eta)(1+\zeta)\\
+  N^8 = \frac{1}{8}(1-\xi)(1+\eta)(1+\zeta)
+\end{align}
+四面体要素の場合、$\bm{x}$および頂点座標$\bm{x}^i~(1\leq i\leq 4)$を用いて自然座標$\{\xi, \eta, \zeta\}$を陽に表した。
+逆に六面体要素においては、自然座標$\{\xi, \eta, \zeta\}$および頂点座標$\bm{x}^i~(1\leq i\leq 20)$を用いて$\bm{x}$を陽に表している点に注意されたい。
+式\ref{}を$\{\xi, \eta, \zeta\}$について解けば四面体要素の場合と同様に、$\bm{x}$および頂点座標$\bm{x}^i~(1\leq i\leq 4)$から自然座標$\{\xi, \eta, \zeta\}$を算出することができる。
+ただし、一般に式\ref{}は非線形方程式であるので、自然座標の算出にはNewton-Raphson法といった非線形方程式の解法を要する。
+式\ref{}のように、形状関数を用いて内部の座標を表す要素のことをアイソパラメトリック要素と呼ぶ。
+ちなみに、四面体要素で定義した形状関数もアイソパラメトリック要素であることが容易に確かめられる。
+\subsubsection{六面体要素の数値積分}
+微小体積要素$\mathrm{d}\Omega$と自然座標空間における微小体積$\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta$の関係は
+\begin{align}
+  \mathrm{d}\Omega
+  &= \left|\frac{\partial (x_1x_2x_3)}{\partial (\xi\eta\zeta)}\right|\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+  &= \left|\varepsilon_{ijk}x^{P}_{i}\frac{\partial N^P}{\partial \xi}x^{Q}_{j}\frac{\partial N^Q}{\partial \eta}x^{R}_{k}\frac{\partial N^R}{\partial \zeta}\right|\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+\end{align}
+で示される。
+ここで、要素$e$の内部及び表面上の領域積分$S$は下記のように$\xi, \eta, \zeta$のみの形で表せる。
+\begin{align}
+  S&:=\int_{\Omega^e}f(\bm{x})\mathrm{d}\Omega\\
+  &=\int_{\Omega^e}f(N^P\bm{x}^P)\left|\frac{\partial (x_1x_2x_3)}{\partial (\xi\eta\zeta)}\right|\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta\\
+  &=\int_{\Omega^e}f(N^P\bm{x}^P)\left|\varepsilon_{lmn}\xi_{,l}\eta_{,m}\zeta_{,n}\right|^{-1}\mathrm{d}\xi\mathrm{d}\eta\mathrm{d}\zeta  \\
+  &=\int_{0}^1\mathrm{d}\xi\int_{0}^{1-\xi}\mathrm{d}\eta\int_{0}^{1-\xi-\eta}f(N^P\bm{x}^P)\left|\varepsilon_{lmn}\xi_{,l}\eta_{,m}\zeta_{,n}\right|^{-1}\mathrm{d}\zeta 
+\end{align}
+\section{接線剛性マトリクス}
+残差ベクトル$\bm{r}$を次式で定義する。
+\begin{align}
+  r_{i} = K_{il}u^{l} - q_{i} - F_i
+\end{align}
+$\bm{r}$の$\bm{u}$についての導関数を考える。
+\begin{align}
+  \frac{\partial r_i}{\partial u_j} = K_{ij} + \frac{\partial K_{il}}{\partial u_{j}}u_l -  \frac{\partial q_i}{\partial u_j} -  \frac{\partial F_i}{\partial u_j}
+\end{align}
+右辺第1項はいわゆる剛性マトリクスである。
+第2項は
+\begin{align}
+  \frac{\partial K_{il}}{\partial u_{j}}u_l
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\partial k}{\partial u_{j}}N^i_{,s}N^l_{,s}\mathrm{d}\Omega_e\\
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\mathrm{d} k}{\mathrm{d} u}\frac{\partial u}{\partial u_j}N^i_{,s}N^l_{,s}\mathrm{d}\Omega_e\\
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\mathrm{d} k}{\mathrm{d} u}N^jN^i_{,s}N^l_{,s}\mathrm{d}\Omega_e
+\end{align}
+\end{document}

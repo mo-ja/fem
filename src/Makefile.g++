@@ -20,9 +20,10 @@ CFLAGS += -ftree-vectorizer-verbose=0
 #LFLAGS += -static
 
 ######## others ########
-INCLUDE_DIRS += -I./  -I$(HOME)/local/cpplapack/include -I$(HOME)/local/seacas/include -I$(HOME)/local/pagmo2/include 
+INCLUDE_DIRS += -I./  -I$(HOME)/local/cpplapack/include -I$(HOME)/local/seacas/include
+#INCLUDE_DIRS += -I$(HOME)/local/pagmo2/include 
 LIB_DIRS += -L$(HOME)/local/seacas/lib -Wl,-rpath $(HOME)/local/seacas/lib
-LIB_DIRS += -L$(HOME)/local/pagmo2/build -Wl,-rpath $(HOME)/local/pagmo2/build
+#LIB_DIRS += -L$(HOME)/local/pagmo2/build -Wl,-rpath $(HOME)/local/pagmo2/build
 LIBS += -lm
 LIBS += -llapack -lblas -lgfortran
 ##LIBS += $(HOME)/local/lapack-3.2.2/liblapack.a $(HOME)/local/lapack-3.2.2/libblas.a -lgfortran
@@ -32,7 +33,8 @@ LIBS += -llapack -lblas -lgfortran
 #LIBS += -lgsl -lgslcblas
 LIBS += -lboost_system 
 #LIBS += -lboost_filesystem 
-LIBS += -lboost_filesystem -lexodus -pthread -lpagmo -lboost_serialization -ltbb
+#LIBS += -lboost_filesystem -lexodus -pthread -lpagmo -lboost_serialization -ltbb
+LIBS += -lboost_filesystem -lexodus -pthread  -lboost_serialization
 ##MACROS += -DUSE_LIBF2C
 
 #######################################

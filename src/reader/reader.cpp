@@ -1,6 +1,8 @@
+#pragma once
 #include "reader/reader.hpp"
 #include "object/object.hpp"
 #include "process/process.hpp"
+//#include <string>
 
 reader::reader(std::string _filename): filename(_filename){
   initialize();
@@ -37,9 +39,8 @@ void reader::read(){
       else if(channel=="elastic")
         {
           std::string matname = push_param(&str);
-          double E = stod(push_param(&str));
-          double nu = stod(str);
-          OBJ.add_material(new elastic(matname, E, nu));
+          std::string kname = str;
+          OBJ.add_material(new elastic(matname, kname));
       }
       else if(channel=="node")
         {
@@ -99,6 +100,21 @@ void reader::read(){
           double dt = stod(str);
           pp.push_back(new process(name, t_end, dt));
           //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
+        }
+      else if(channel == "table")
+        {
+          std::string name = push_param(&str);
+          int n = stoi(str);
+          table<double, double> t(name);
+          //std::cout << "channnel " << "is table:"<<name << " " << n  << std::endl;                  
+          for(size_t i = 0; i<n;i++){
+            std::getline(ifs, str, ';');
+            double x = stod(push_param(&str));
+            double y = stod(str);
+            //std::cout << x << " " << y << std::endl;
+            t.add_value(x, y);
+          }
+          OBJ.tables[name] = t;
         }
       else
         {

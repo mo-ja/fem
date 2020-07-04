@@ -5,6 +5,7 @@
 #include "material/material.hpp"
 #include "bc/displacement.hpp"
 #include "bc/force.hpp"
+#include "table/table.hpp"
 
 class object{
 public:
@@ -16,7 +17,8 @@ public:
   std::map<uint32_t, uint32_t> nn2NodesInd;
   std::map<uint32_t, uint32_t> en2ElementsInd;
   std::map<std::string, material*> materials;
-
+  std::map<std::string, table<double, double>> tables;
+  
   object();
   void add_elem(element* elem);
   void add_elem(std::string matname, std::vector<uint32_t> nivec, uint32_t en);
@@ -24,6 +26,7 @@ public:
   void add_material(material* _mp);
   void add_displacement(displacement* _dp);
   void add_force(force* _fp);
+  //void add_tables(table* _tp);
   node* nn2np(uint32_t nn);
   element* en2ep(uint32_t en);
   void test();

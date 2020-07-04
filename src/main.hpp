@@ -1,6 +1,8 @@
 #pragma once
 #include "cpplapack.h"
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include "boost/foreach.hpp"
 #include "boost/filesystem.hpp"
 #include "exodusII.h"
@@ -18,6 +20,7 @@ class process;
 class bc;
 class displacement;
 class force;
+template<class T, class U> class table;
 
 
 extern std::vector<process*> processes;

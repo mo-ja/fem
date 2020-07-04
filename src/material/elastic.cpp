@@ -15,6 +15,14 @@ elastic::elastic(std::string _matname, double _E, double _nu):
   std::flog << "================ " << matname << " ================" <<std::endl <<std::endl<<std::endl;
   return;
 }
+elastic::elastic(std::string _matname, std::string _kname):
+  material(_matname), kname(_kname)
+{
+  std::flog << "================ " << matname << " ================" <<std::endl;
+  std::flog << "temperature table:" << kname <<std::endl;
+  std::flog << "================ " << matname << " ================" <<std::endl <<std::endl<<std::endl;
+  return;
+}
 
 
 void elastic::calc_T(CPPL::dgematrix F_a, CPPL::dgematrix& T_a){

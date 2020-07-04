@@ -2,6 +2,7 @@
 #include "node/node.hpp"
 #include "element/element.hpp"
 #include "material/elastic.hpp"
+#include "table/table.hpp"
 
 class reader{
 public:

@@ -1,4 +1,4 @@
-elastic, mat001, 200e9, 0.3;
+elastic, mat001, test_table;
 
 node, 1, 0, 0;
 node, 2, 1.5, 0.1;
@@ -16,3 +16,8 @@ displacement, 1, 1, 0;
 displacement, 2, 1, 0;
 displacement, 5, 1, 1;
 displacement, 6, 1, 1;
+
+table, test_table, 3;
+1, 2;
+4, 8;
+16, 32;

@@ -1,12 +1,12 @@
 #include "main.hpp"
 //#include <iostream>
-
 //class
 #include "object/object.hpp"
 #include "element/element.hpp"
 #include "node/node.hpp"
 #include "reader/reader.hpp"
 #include "writer/writer.hpp"
+#include "table/table.hpp"
 
 object OBJ;
 std::vector<process*> pp;
@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
     std::cout << "[error] Please Specify Input File Name."  << std::endl;
     return 1;
   }
-  
   fs::path ife_path(argv[1]);
   fs::path ofe_dir(ife_path.stem().string() +  ".ofe");
   std::cout<< "Removing old ofe files...";
@@ -38,8 +37,5 @@ int main(int argc, char *argv[])
   ife.read();
   writer exodus(ofe_dir.string() +"/" +ife_path.stem().string()+".exo");
   exodus.write_initial_state();
-  
-  
-  
   return 0;
 }

@@ -16,6 +16,7 @@ public:
   ~table();
   void add_value(T ix, U iy);
   U value(T ix);
+  double gradient(T ix);
 };
 
 template<class T, class U>
@@ -50,5 +51,16 @@ U table<T, U>::value(T ix){
     return y[size - 1];
   }else{
     return (ix - x[ind-1])/(x[ind] - x[ind - 1]) * (y[ind] - y[ind - 1])  + y[ind - 1];
+  }
+}
+template<class T, class U>
+double table<T, U>::gradient(T ix){
+  int ind = std::lower_bound(x.begin(), x.end(), ix) - x.begin();
+  if(ind==0){
+    return 0;
+  }else if(ind==size){
+    return 0;
+  }else{
+    return (y[ind] - y[ind - 1])/(x[ind] - x[ind - 1]);
   }
 }

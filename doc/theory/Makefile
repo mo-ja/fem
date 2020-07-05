@@ -4,4 +4,4 @@ default:
 	#evince main.pdf &
 
 clean:
-	rm *.pdf *.aux *.log *~ 
+	rm *.pdf *.aux *.log *~ *.dvi

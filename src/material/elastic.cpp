@@ -1,4 +1,7 @@
 #include "material/elastic.hpp"
+#include "object/object.hpp"
+
+
 
 elastic::elastic(std::string _matname, double _E, double _nu):
   material(_matname), E(_E), nu(_nu)
@@ -24,7 +27,6 @@ elastic::elastic(std::string _matname, std::string _kname):
   return;
 }
 
-
 void elastic::calc_T(CPPL::dgematrix F_a, CPPL::dgematrix& T_a){
   T_a = F_a * 0;
   CPPL::dgematrix E_a = 0.5 * (F_a + t(F_a));
@@ -43,4 +45,12 @@ void elastic::calc_T(CPPL::dgematrix F_a, CPPL::dgematrix& T_a){
 }
 void elastic::calc_T_C(CPPL::dgematrix F_a, CPPL::dgematrix& T_a, CPPL::dgematrix& C){
   return;
+}
+
+double elastic::calc_k(double temp){
+  return OBJ.tables[kname].value(temp);
+}
+
+double elastic::calc_dk_dt(double temp){
+  return OBJ.tables[kname].gradient(temp);
 }

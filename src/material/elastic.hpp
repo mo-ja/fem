@@ -18,6 +18,6 @@ public:
   ~elastic();
   void calc_T(CPPL::dgematrix F_a, CPPL::dgematrix& T_a);
   void calc_T_C(CPPL::dgematrix F_a, CPPL::dgematrix& T_a, CPPL::dgematrix& C);
-  void calc_k(double temp);
-  void calc_dk_dt(double temp);
+  double calc_k(double temp);
+  double calc_dk_dt(double temp);
 };

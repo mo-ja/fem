@@ -18,6 +18,7 @@ void element::initialize(){
       X_0(j, i) = Np[i]->x_0(j);
     }
   }
+  /*
   //std::cout << X_0;
   CPPL::dgematrix mov(NoN, dim);
   mov(0, 0) = 1;  mov(0, 1) = 0;
@@ -29,6 +30,7 @@ void element::initialize(){
   //Phi_0 = mov * Psi;
   Phi_0 = mov*CPPL::i(Psi);
   //std::cout << "[initialization] elem " << en << "." <<" S = " << S_0 << std::endl << "Phi_0 = " << Phi_0;
+  */
   return;
 }
 

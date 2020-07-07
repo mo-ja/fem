@@ -21,7 +21,7 @@ public:
   
   object();
   void add_elem(element* elem);
-  void add_elem(std::string matname, std::vector<uint32_t> nivec, uint32_t en);
+  void add_elem(std::string matname, std::vector<int> nivec, uint32_t en);
   void add_node(node* node);
   void add_material(material* _mp);
   void add_displacement(displacement* _dp);

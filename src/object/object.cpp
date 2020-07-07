@@ -10,7 +10,7 @@ void object::add_elem(element* elem){
   Elements.push_back(elem);
 }
 
-void object::add_elem(std::string _matname, std::vector<uint32_t> nivec, uint32_t en){
+void object::add_elem(std::string _matname, std::vector<int> nivec, uint32_t en){
   en2ElementsInd[en] = Elements.size();
   std::vector<node*> nodes;
   BOOST_FOREACH(auto inn, nivec){

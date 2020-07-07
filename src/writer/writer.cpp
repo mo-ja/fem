@@ -7,7 +7,7 @@ writer::writer(std::string exo_path){
   exoid = ex_create(exo_path.c_str(), EX_CLOBBER, &CPU_word_size, &IO_word_size);
   ex_put_init(exoid,
               exo_path.c_str(),//title
-              OBJ.Elements[0]->dim,//num_dimension
+              3,//num_dimension
               OBJ.Nodes.size(),//num on nodes
               OBJ.Elements.size(),//num of elements
               1,//num of elem block
@@ -31,18 +31,20 @@ writer::~writer(){
 
 void writer::write_initial_state(){  
   //write node information
-  std::vector<double> x_coord, y_coord;
+  std::vector<double> x_coord, y_coord, z_coord;
   std::vector<int> nind2nn;
-  char* coordName[2];
+  char* coordName[3];
   coordName[0] = "xcoor";
   coordName[1] = "ycoor";
+  coordName[2] = "zcoor";
   BOOST_FOREACH(auto inp, OBJ.Nodes){
     x_coord.push_back(inp->x_0(0));
     y_coord.push_back(inp->x_0(1));
+    z_coord.push_back(inp->x_0(2));
     nind2nn.push_back(inp->nn);
-    std::flog << inp->x_0(0) << " " << inp->x_0(1) << " " <<  inp->nn << " " << std::endl;
+    std::flog << inp->x_0(0) << " " << inp->x_0(1) << " " <<  inp->x_0(2) <<" "<<inp->nn << " " << std::endl;
   }
-  ex_put_coord(exoid, x_coord.data(), y_coord.data(), NULL);
+  ex_put_coord(exoid, x_coord.data(), y_coord.data(),z_coord.data());
   ex_put_coord_names(exoid, coordName);
   ex_put_node_num_map(exoid, nind2nn.data());
   
@@ -52,9 +54,9 @@ void writer::write_initial_state(){
   // this function should be re-designed depending on the homogenates
   ex_put_elem_block(exoid,
                     1,
-                    "TRINANGLE",
+                    "TETRA",
                     OBJ.Elements.size(),
-                    3,
+                    4,
                     0
                     );
   std::flog << "begin element connectivity" << std::endl << std::endl;

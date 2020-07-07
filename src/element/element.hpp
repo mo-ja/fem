@@ -9,8 +9,8 @@ public:
   std::vector<node*> Np; //node pointer
   material* mp; //material pointer
   uint32_t en; //element ID
-  unsigned int NoN = 3; //Number of Node for triangle
-  unsigned int dim = 2; //dimension
+  unsigned int NoN = 4; //Number of Node for triangle
+  unsigned int dim = 3; //dimension
   CPPL::dgematrix F_a; //deformation gradient
   CPPL::dgematrix T_a; //deformation gradient
   CPPL::dgematrix E_a; //deformation gradient

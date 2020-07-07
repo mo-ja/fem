@@ -47,10 +47,11 @@ void reader::read(){
           //std::cout << "channnel " << " is node. param=" << str  << std::endl;
           uint32_t nn = stoi(push_param(&str));
           double x = stod(push_param(&str));
-          double y = stod(str);
+          double y = stod(push_param(&str));
+          double z = stod(str);
           //std::cout << "nn = " << nn << " x= " << x << " y = " <<  y  << std::endl;
-          CPPL::dcovector x_0(2);
-          x_0(0) = x; x_0(1) = y;
+          CPPL::dcovector x_0(3);
+          x_0(0) = x; x_0(1) = y; x_0(2) = z;
           //std::cout <<"x_0=" <<  x_0;
           OBJ.add_node(new node(x_0, nn));
           //std::cout << "nn = " << nn << " x= " << OBJ.Nodes[OBJ.Nodes.size() - 1] -> x_0(0) << " y = " <<  OBJ.Nodes[OBJ.Nodes.size() - 1] -> x_0(1)  << std::endl;
@@ -63,7 +64,20 @@ void reader::read(){
           uint32_t nn1 = stoi(push_param(&str));
           uint32_t nn2 = stoi(push_param(&str));
           uint32_t nn3 = stoi(str);
-          std::vector<uint32_t> nivec = {nn1, nn2, nn3};
+          std::vector<int> nivec = {nn1, nn2, nn3};
+          OBJ.add_elem(matname, nivec, en);
+          //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
+        }
+      else if(channel == "tetra4")
+        {
+          //std::cout << "channnel " << "is tria"  << std::endl;        
+          std::string matname = push_param(&str);
+          int en = stoi(push_param(&str));
+          int nn1 = stoi(push_param(&str));
+          int nn2 = stoi(push_param(&str));
+          int nn3 = stoi(push_param(&str));
+          int nn4 = stoi(str);
+          std::vector<int> nivec = {nn1, nn2, nn3, nn4};
           OBJ.add_elem(matname, nivec, en);
           //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
         }

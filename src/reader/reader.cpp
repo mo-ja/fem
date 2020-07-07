@@ -50,8 +50,8 @@ void reader::read(){
           double y = stod(push_param(&str));
           double z = stod(str);
           //std::cout << "nn = " << nn << " x= " << x << " y = " <<  y  << std::endl;
-          CPPL::dcovector x_0(3);
-          x_0(0) = x; x_0(1) = y; x_0(2) = z;
+          dcovec3 x_0(x,y,z);
+          //x_0(0) = x; x_0(1) = y; x_0(2) = z;
           //std::cout <<"x_0=" <<  x_0;
           OBJ.add_node(new node(x_0, nn));
           //std::cout << "nn = " << nn << " x= " << OBJ.Nodes[OBJ.Nodes.size() - 1] -> x_0(0) << " y = " <<  OBJ.Nodes[OBJ.Nodes.size() - 1] -> x_0(1)  << std::endl;

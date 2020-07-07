@@ -12,29 +12,19 @@ element::element(material* _mp, std::vector<node*> _Np, uint32_t _en):
 
 void element::initialize(){
   //std::cout << "[initialization] elem " << en << "." << std::endl;
-  X_0 = CPPL::dgematrix(dim, NoN);
+  std::vector<dcovec3> X_0(NoN);
   for(size_t i=0; i<NoN; i++){
-    for(size_t j=0; j<dim; j++){
-      X_0(j, i) = Np[i]->x_0(j);
-    }
+      X_0[i] = Np[i]->x_0;
   }
-  /*
-  //std::cout << X_0;
-  CPPL::dgematrix mov(NoN, dim);
-  mov(0, 0) = 1;  mov(0, 1) = 0;
-  mov(1, 0) = 0;  mov(1, 1) = 1;
-  mov(2, 0) = -1;  mov(2, 1) = -1;
+  V_0 = dot3(cross3(X_0[0] - X_0[3], X_0[1] - X_0[3]), X_0[2] - X_0[3]);
+  V_0 = abs(V_0)/6.0;
 
-  CPPL::dgematrix Psi = X_0*mov;
-  S_0 = (Psi(0,0)*Psi(1,1) - Psi(0,1)*Psi(1,0)) * 0.5;
-  //Phi_0 = mov * Psi;
-  Phi_0 = mov*CPPL::i(Psi);
-  //std::cout << "[initialization] elem " << en << "." <<" S = " << S_0 << std::endl << "Phi_0 = " << Phi_0;
-  */
+  std::flog << "elem:" << en<< " Vol="<<V_0<<std::endl;
   return;
 }
 
 void element::calc_fint(){
+  /*
   CPPL::dgematrix X_a(dim, NoN);
   for(size_t i=0; i<NoN; i++){
     for(size_t j=0; j<dim; j++){
@@ -46,6 +36,7 @@ void element::calc_fint(){
   S_a = J_a * S_0;
   mp->calc_T(F_a, T_a);
   std::flog << T_a;
+  */
 }
 
 // void element::translate_nodes(CPPL::dcovector du){

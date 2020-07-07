@@ -96,9 +96,9 @@ $\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4$からなる四面体の内部および�
 すなわち、
 \begin{align}
   \xi = \frac{V(\bm{x}, \bm{x}_2, \bm{x}_3, \bm{x}_4)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
-  \eta = \frac{V(\bm{x}, \bm{x}_3, \bm{x}_4, \bm{x}_1)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
-  \zeta = \frac{V(\bm{x}, \bm{x}_4, \bm{x}_1, \bm{x}_2)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
-  \omega = \frac{V(\bm{x}, \bm{x}_1, \bm{x}_2, \bm{x}_3)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}
+  \eta = \frac{V(\bm{x}_1, \bm{x}, \bm{x}_3, \bm{x}_4)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
+  \zeta = \frac{V(\bm{x}_1, \bm{x}_2, \bm{x}, \bm{x}_4)}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}\\
+  \omega =\frac{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x})}{V(\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4)}
 \end{align}
 ただし、$V(\bm{a}, \bm{b}, \bm{c}, \bm{d})$は4点$\bm{a},\bm{b},\bm{c},\bm{d}$で作られる四面体の体積を表す。
 図\ref{fig-2}に示す概念からわかるように、4つの体積座標はそれぞれ独立ではなく、$\xi+\eta+\zeta+\omega=1$を満たす。
@@ -113,12 +113,12 @@ $a_i$の微分を考えると、
 と表すことができるので、自然座標の空間微分は
 \begin{align}
   \xi_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{2j} - x_{4j})(x_{3k} - x_{4k})\\
-  \eta_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{3j} - x_{1j})(x_{4k} - x_{1k})\\
-  \zeta_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{4j} - x_{2j})(x_{1k} - x_{2k})\\
+  \eta_{,i} &= -\frac{1}{6V}\varepsilon_{ijk}(x_{1j} - x_{4j})(x_{4k} - x_{4k})\\
+  \zeta_{,i} &= -\frac{1}{6V}\varepsilon_{ijk}(x_{2j} - x_{4j})(x_{1k} - x_{4k})\\
 \end{align}
 となる。従属変数である$\omega$は、その対称性から明らかに
 \begin{align}
-  \omega_{,i} &= \frac{1}{6V}\varepsilon_{ijk}(x_{1j} - x_{3j})(x_{2k} - x_{3k})
+  \omega_{,i} &= -\frac{1}{6V}\varepsilon_{ijk}(x_{2j} - x_{1j})(x_{3k} - x_{1k})
 \end{align}
 \subsection{四面体要素の形状関数}
 本小節の目的は、被積分関数および積分変数を自然座標$\xi, \eta, \zeta$および節点座標$\bm{x}_1, \bm{x}_2, \bm{x}_3, \bm{x}_4$で表すことにある。

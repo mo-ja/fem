@@ -14,10 +14,10 @@ public:
   //CPPL::dgematrix F_a; //deformation gradient
   //CPPL::dgematrix T_a; //deformation gradient
   //CPPL::dgematrix E_a; //deformation gradient
-  CPPL::dcovector q_0;
-  CPPL::dcovector q;
-  CPPL::dcovector q_a;
-  CPPL::dgematrix Phi_0; // spatial derivative in natural coordinate system at initial state
+  dcovec3 q_0;
+  dcovec3 q;
+  dcovec3 q_a;
+  std::vector<dcovec3> Phi_0; // spatial derivative in natural coordinate system at initial state
   //std::vector<CPPL::dcovector> Phi_a; // spatial derivative of shape function at initial state
   double V_0;//volume
   //double V_a;//area after deformation

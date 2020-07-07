@@ -19,7 +19,13 @@ void element::initialize(){
   V_0 = dot3(cross3(X_0[0] - X_0[3], X_0[1] - X_0[3]), X_0[2] - X_0[3]);
   V_0 = abs(V_0)/6.0;
 
-  std::flog << "elem:" << en<< " Vol="<<V_0<<std::endl;
+  //std::flog << "elem:" << en<< " Vol="<<V_0<<std::endl;
+
+  Phi_0 = std::vector<dcovec3>(4);
+  for(int i=0;i<4;i++){
+    Phi_0[i] = cross3(X_0[(2+i)%4] - X_0[3-i], X_0[(5-i)%4] - X_0[3-i])/6./V_0;
+    //std::flog << "Phi_0["<<i<<"]="<<Phi_0[i];
+  }
   return;
 }
 

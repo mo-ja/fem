@@ -1,5 +1,7 @@
 #pragma once
 #include "main.hpp"
+#include "bc/bc.hpp"
+#include "bc/temperature.hpp"
 
 class process{
 public:
@@ -11,4 +13,6 @@ public:
   ~process(void);
   void take_a_step(void);
   void consider_displacement(CPPL::dcovector& residual, CPPL::dgematrix& Kmat);
+  void consider_temperature(dcovector& r, dgematrix& K);
+  void distribute_temperature(dcovector r);    
 };

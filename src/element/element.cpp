@@ -29,27 +29,75 @@ void element::initialize(){
   return;
 }
 
-void element::calc_fint(){
-  /*
-  CPPL::dgematrix X_a(dim, NoN);
-  for(size_t i=0; i<NoN; i++){
-    for(size_t j=0; j<dim; j++){
-      X_a(j, i) = Np[i]->x_a(j);
-    }
+void element::calc_qint(dcovector &qM_a){
+  double T = 0;
+  for(size_t i=0;i<NoN;i++){
+    T +=  Np[i]-> T_a/NoN;
   }
-  F_a = X_a * Phi_0;
-  double J_a = ( F_a(0,0)* F_a(1,1) - F_a(0,1) * F_a(1,0) );
-  S_a = J_a * S_0;
-  mp->calc_T(F_a, T_a);
-  std::flog << T_a;
-  */
+  double k = mp->calc_k(T);
+  q_a.zero();
+  for(size_t i=0;i<NoN;i++){
+    q_a += Np[i]-> T_a * Phi_0[i];
+  }
+  q_a *= k*V_0;
+  dcovector qint(NoN);
+  for(size_t i=0;i<NoN;i++){
+    qint(i) = dot3(Phi_0[i], q_a);
+  }
+  contribute_qM_a(qint, qM_a);
+  return;
 }
 
-// void element::translate_nodes(CPPL::dcovector du){
-//   BOOST_FOREACH(auto inp, Np){
-//     inp->x = inp->x_0 + du;
-//   }
-//   return;
-// }
+void element::calc_K_and_qint(dgematrix &KM_a, dcovector &qM_a){
+  double T = 0;
+  for(size_t i=0;i<NoN;i++){
+    T +=  Np[i]-> T_a/NoN;
+  }
+  double k = mp->calc_k(T);
+  q_a.zero();
+  for(size_t i=0;i<NoN;i++){
+    q_a += Np[i]-> T_a * Phi_0[i];
+  }
+  q_a *= k*V_0;
+  dcovector qint(NoN);
+  for(size_t i=0;i<NoN;i++){
+    qint(i) = dot3(Phi_0[i], q_a);
+  }
 
+  // KI
+  dgematrix KI(NoN, NoN);
+  for(size_t i=0;i<NoN;i++){
+    for(size_t j=0;j<NoN;j++){
+      KI(i, j) = dot3(Phi_0[i], Phi_0[j])*k*V_0;
+    }
+  }
+
+  //KII
+  double dk_dt = mp->calc_dk_dt(T);
+  dgematrix KII(NoN, NoN);
+  for(size_t i=0;i<NoN;i++){
+    for(size_t j=0;j<NoN;j++){
+      KII(i, j) = qint(i)/k/NoN*dk_dt*V_0;
+    }
+  }
+  contribute_qM_a(qint, qM_a);
+  contribute_KM_a(KI+KII, KM_a);
+  return;
+}
+
+void element::contribute_qM_a(dcovector qint, dcovector &qM_a){
+  for(size_t i = 0;i<NoN;i++){
+    qM_a(Np[i]->nn_ind) += qint(i);
+  }
+  return ;
+}
+
+void element::contribute_KM_a(dgematrix K, dgematrix &KM_a){
+  for(size_t i = 0;i<NoN;i++){
+    for(size_t j=0;j<NoN;j++){
+      KM_a(Np[i]->nn_ind, Np[j]->nn_ind) += K(i, j);
+    }
+  }
+  return ;
+}
 

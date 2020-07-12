@@ -18,12 +18,16 @@ class elastic;
 class writer;
 class process;
 class bc;
-class displacement;
-class force;
+class temperature;
+
 template<class T, class U> class table;
 
 typedef CPPL::dcovector_small<2> dcovec2;
 typedef CPPL::dcovector_small<3> dcovec3;
+typedef CPPL::dgematrix dgematrix;
+typedef CPPL::dcovector dcovector;
+typedef CPPL::dsymatrix dsymatrix;
+
 
 extern std::vector<process*> processes;
 extern object OBJ;
@@ -55,4 +59,15 @@ inline dcovec3 cross3(dcovec3 a, dcovec3 b){
 }
 inline double dot3(dcovec3 a, dcovec3 b){
   return a(0)*b(0) + a(1)*b(1) + a(2)*b(2);
+}
+inline double dot(dcovector a, dcovector b){
+  if(a.l!=b.l){
+    std::flog << "[Error] vector sizes are different each other at dot function. "<<std::endl;
+    exit(-1);
+  }
+  double ans = 0;
+  for(size_t i=0;i<a.l;i++){
+    ans += a(i)*b(i);
+  }
+  return ans;
 }

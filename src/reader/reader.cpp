@@ -81,18 +81,17 @@ void reader::read(){
           OBJ.add_elem(matname, nivec, en);
           //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
         }
-      else if(channel == "displacement")
+      else if(channel == "temperature")
         {
           //std::cout << "channnel " << "is tria"  << std::endl;        
           //std::string param = push_param(&str);
           uint32_t nn = stoi(push_param(&str));
-          uint32_t dir = stoi(push_param(&str));
           uint32_t value = stoi(str);
           //uint32_t nn3 = stoi(str);
           std::vector<int> nnvec = {nn};
-          OBJ.add_displacement(new displacement(nnvec, dir, value));
+          OBJ.add_temperature(new temperature(nnvec, value));
           //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
-        }
+        }/*
       else if(channel == "force")
         {
           //std::cout << "channnel " << "is tria"  << std::endl;        
@@ -104,7 +103,7 @@ void reader::read(){
           std::vector<int> nnvec = {nn};
           OBJ.add_force(new force(nnvec, dir, value));
           //std::cout << "en = " << en << " nn1= " << nn1 << " nn2 = " << nn2<< " nn3 = " << nn3  << std::endl;
-        }
+          }*/
       else if(channel == "process")
         {
           //std::cout << "channnel " << "is tria"  << std::endl;        

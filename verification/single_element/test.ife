@@ -10,7 +10,9 @@ tetra4, mat001, 1, 1, 2, 3, 4;
 tetra4, mat001, 2, 1, 3, 2, 5;
 
 
-table, test_table, 3;
-1, 2;
-4, 8;
-16, 32;
+table, test_table, 2;
+0, 2;
+100, 100;
+
+temperature, 4, 100;
+temperature, 5, 0;

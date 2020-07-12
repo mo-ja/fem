@@ -25,7 +25,10 @@ public:
   //member function
   element(material* _mp, std::vector<node*> _Np, uint32_t _en); // constructor
   void initialize();
-  void calc_fint();
-  CPPL::dcovector calc_fint_and_Kmat();
+  void calc_qint(dcovector &qM_a);
+  void calc_K_and_qint(dgematrix &KM_a, dcovector &qM_a);
+  void contribute_KM_a(dgematrix K, dgematrix &KM_a);
+  void contribute_qM_a(dcovector qint, dcovector &qM_a);
+  //CPPL::dcovector calc_fint_and_Kmat();
   //void calc_fint();
 };

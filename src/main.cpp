@@ -2,11 +2,11 @@
 //#include <iostream>
 //class
 #include "object/object.hpp"
-#include "element/element.hpp"
-#include "node/node.hpp"
+//#include "element/element.hpp"
+//#include "node/node.hpp"
 #include "reader/reader.hpp"
 #include "writer/writer.hpp"
-#include "table/table.hpp"
+#include "process/process.hpp"
 
 object OBJ;
 std::vector<process*> pp;
@@ -37,5 +37,8 @@ int main(int argc, char *argv[])
   ife.read();
   writer exodus(ofe_dir.string() +"/" +ife_path.stem().string()+".exo");
   exodus.write_initial_state();
+  //OBJ->pp.take_step();
+  process p("test", 0, 1);
+  p.take_a_step();
   return 0;
 }

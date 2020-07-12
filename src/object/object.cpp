@@ -28,13 +28,14 @@ void object::add_node(node* node){
 void object::add_material(material* _mp){
   materials[_mp->matname] = _mp;
 }
-void object::add_displacement(displacement* _dp){
-  displacements.push_back(_dp);
+void object::add_temperature(temperature* _tp){
+  temperatures.push_back(_tp);
 }
+/*
 void object::add_force(force* _fp){
   forces.push_back(_fp);
 }
-
+*/
 node* object::nn2np(uint32_t nn){
   return Nodes[nn2NodesInd[nn]];
 }

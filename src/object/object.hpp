@@ -26,8 +26,6 @@ public:
   void add_node(node* node);
   void add_material(material* _mp);
   void add_temperature(temperature* _dp);
-  //void add_force(force* _fp);
-  //void add_tables(table* _tp);
   node* nn2np(uint32_t nn);
   element* en2ep(uint32_t en);
   void test();

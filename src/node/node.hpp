@@ -9,7 +9,7 @@ public:
   //CPPL::dcovector x;   //position vector at start of the increment
   //CPPL::dcovector x_a; //position vector of current step
   size_t nn; //node ID
-  size_t nn_ind; //node index for total K matrix and qM;
+  int nn_ind; //node index for total K matrix and qM;
   double T_0;
   double T;
   double T_a;

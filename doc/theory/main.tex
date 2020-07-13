@@ -261,8 +261,8 @@ $\bm{r}$の$\bm{u}$についての導関数を考える。
 第2項は
 \begin{align}
   \frac{\partial K_{il}}{\partial u_{j}}u_l
-  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\partial k}{\partial u_{j}}N^i_{,s}N^l_{,s}\mathrm{d}\Omega_e\\
-  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\mathrm{d} k}{\mathrm{d} u}\frac{\partial u}{\partial u_j}N^i_{,s}N^l_{,s}\mathrm{d}\Omega_e\\
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\partial k}{\partial u_{j}}N^i_{,s}N^l_{,s}u_l\mathrm{d}\Omega_e\\
+  &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\mathrm{d} k}{\mathrm{d} u}\frac{\partial u}{\partial u_j}N^i_{,s}\frac{q_s}{k}\mathrm{d}\Omega_e\\
   &= \sum_{e \in \mathbb{E}_i\cap\mathbb{E}_l} \int \frac{\mathrm{d} k}{\mathrm{d} u}N^jN^i_{,s}N^l_{,s}\mathrm{d}\Omega_e
 \end{align}
 \end{document}

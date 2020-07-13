@@ -59,10 +59,10 @@ void element::calc_K_and_qint(dgematrix &KM_a, dcovector &qM_a){
   for(size_t i=0;i<NoN;i++){
     q_a += Np[i]-> T_a * Phi_0[i];
   }
-  q_a *= k*V_0;
+  q_a *= k;
   dcovector qint(NoN);
   for(size_t i=0;i<NoN;i++){
-    qint(i) = dot3(Phi_0[i], q_a);
+    qint(i) = dot3(Phi_0[i], q_a)*V_0;
   }
   //std::flog << "elem:"<< en <<"\tqint="<<qint<<std::endl;
   // KI
@@ -78,7 +78,7 @@ void element::calc_K_and_qint(dgematrix &KM_a, dcovector &qM_a){
   dgematrix KII(NoN, NoN);
   for(size_t i=0;i<NoN;i++){
     for(size_t j=0;j<NoN;j++){
-      KII(i, j) = qint(i)/k/NoN * dk_dt;
+      KII(i, j) = qint(i)/k/NoN * dk_dt*V_0;
     }
   }
   contribute_qM_a(qint, qM_a);

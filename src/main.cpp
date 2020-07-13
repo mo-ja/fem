@@ -36,9 +36,11 @@ int main(int argc, char *argv[])
   reader ife(ife_path.string());
   ife.read();
   writer exodus(ofe_dir.string() +"/" +ife_path.stem().string()+".exo");
+
   exodus.write_initial_state();
-  //OBJ->pp.take_step();
+  exodus.write_state(0);
   process p("test", 0, 1);
   p.take_a_step();
+  exodus.write_state(1);
   return 0;
 }

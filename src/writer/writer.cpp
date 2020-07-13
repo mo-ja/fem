@@ -3,7 +3,7 @@
 
 writer::writer(std::string exo_path){
   int CPU_word_size = sizeof(double);
-  int IO_word_size = 8;
+  int IO_word_size = 4;
   exoid = ex_create(exo_path.c_str(), EX_CLOBBER, &CPU_word_size, &IO_word_size);
   ex_put_init(exoid,
               exo_path.c_str(),//title
@@ -69,7 +69,44 @@ void writer::write_initial_state(){
   }
   ex_put_elem_conn(exoid, 1, connectivity.data());
   ex_put_elem_num_map(exoid, eind2en.data());
+
+  // Write Output Datas
+  ex_put_variable_param(exoid,
+                        EX_NODAL,
+                        1
+                        );
+  char* node_var_name[1] = {"Temperature"};
+  ex_put_variable_names(exoid, EX_NODAL, 1, node_var_name);
+
+  /*
+  ex_put_variable_param(exoid,
+                        EX_ELEM_BLOCK,
+                        4
+                        );
+  char* elem_var_name[4] = {"Heat Flux x", "Heat Flux y","Heat Flux z","Heat Flux Magnitude"};
+  ex_put_variable_names(exoid, EX_ELEM_BLOCK, 4, elem_var_name);
   
+
+  ex_put_elem_var_tab(exoid,
+                      1,
+                      4,
+                      (std::vector<int>(1, 1)).data()
+                      );
+  */
   return;
 }
 
+void writer::write_nodal_value(int time_step){
+  std::vector<double> v;
+  BOOST_FOREACH(node* inp, OBJ.Nodes){
+    v.push_back(inp->T_a);
+  }
+  ex_put_nodal_var(exoid, time_step, 1, OBJ.Nodes.size(), v.data());
+}
+
+void writer::write_state(int time_step){
+  std::flog << "write state @" << time_step;
+  ex_put_time(exoid, time_step+1, &time_step);
+  write_nodal_value(time_step);
+  std::flog << "... Done"<<std::endl;
+}

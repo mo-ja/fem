@@ -80,7 +80,6 @@ void process::take_a_step(){
     // <- for calc precise KM_a;
     */
   }
-  
   return;
 }
 

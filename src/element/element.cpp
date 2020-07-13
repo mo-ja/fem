@@ -63,7 +63,7 @@ void element::calc_K_and_qint(dgematrix &KM_a, dcovector &qM_a){
   for(size_t i=0;i<NoN;i++){
     qint(i) = dot3(Phi_0[i], q_a);
   }
-  
+  std::flog << "elem:"<< en <<"\tqint="<<qint<<std::endl;
   // KI
   dgematrix KI(NoN, NoN);
   for(size_t i=0;i<NoN;i++){

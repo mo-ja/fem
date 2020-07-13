@@ -16,6 +16,7 @@ void process::take_a_step(){
   dcovector qM_a(OBJ.DOF());
   dgematrix KM_a(OBJ.DOF(), OBJ.DOF());
   dcovector fM_a(OBJ.DOF());
+  std::flog << "Begin analysis"<<std::endl;
   fM_a.zero();
   BOOST_FOREACH(auto tp, OBJ.temperatures){
     BOOST_FOREACH(auto inn, tp->nn){
@@ -34,8 +35,10 @@ void process::take_a_step(){
   std::flog  << "rM_a="<<rM_a;
   std::flog  << "KM_a="<<KM_a;
   std::flog  << "chk="<<chk;
+  int cnt = 1;
   std::flog  << "chk:damax="<<damax(chk) << " abs=" << sqrt(dot(chk, chk)) <<std::endl;
   while(sqrt(dot(rM_a, rM_a))>1e-9){// this criteria should be modified!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    std::cout << "iter:" << cnt++ << std::endl;
     KM_a.dgesv(rM_a);
     distribute_temperature(rM_a);
     

@@ -6,6 +6,7 @@ element::element(material* _mp, std::vector<node*> _Np, uint32_t _en):
     std::cout << "[error] Number of node must be " << NoN <<" for elem " << en << "."<< std::endl;
     exit(1);
   }
+  q_a.zero();
   initialize();
   return;
 }

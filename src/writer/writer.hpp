@@ -10,6 +10,7 @@ public:
   void initialize();
   void write_initial_state();
   void write_nodal_value(int time_step);
+  void write_element_value(int time_step);
   void write_state(int time_step);
   
 };

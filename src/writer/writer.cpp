@@ -78,7 +78,7 @@ void writer::write_initial_state(){
   char* node_var_name[1] = {"Temperature"};
   ex_put_variable_names(exoid, EX_NODAL, 1, node_var_name);
 
-  /*
+  
   ex_put_variable_param(exoid,
                         EX_ELEM_BLOCK,
                         4
@@ -92,7 +92,7 @@ void writer::write_initial_state(){
                       4,
                       (std::vector<int>(1, 1)).data()
                       );
-  */
+  
   return;
 }
 
@@ -104,9 +104,29 @@ void writer::write_nodal_value(int time_step){
   ex_put_nodal_var(exoid, time_step, 1, OBJ.Nodes.size(), v.data());
 }
 
+void writer::write_element_value(int time_step){
+  std::vector<double> vx;
+  std::vector<double> vy;
+  std::vector<double> vz;
+  std::vector<double> vmag;
+  BOOST_FOREACH(element* iep, OBJ.Elements){
+    dcovec3 x = iep->q_a;
+    vx.push_back(x(0));
+    vy.push_back(x(1));
+    vz.push_back(x(2));
+    vmag.push_back(sqrt(dot3(x, x)));
+  }
+  ex_put_elem_var(exoid, time_step, 1, 1, OBJ.Elements.size(), vx.data());
+  ex_put_elem_var(exoid, time_step, 2, 1, OBJ.Elements.size(), vy.data());
+  ex_put_elem_var(exoid, time_step, 3, 1, OBJ.Elements.size(), vz.data());
+  ex_put_elem_var(exoid, time_step, 4, 1, OBJ.Elements.size(), vmag.data());
+}
+
+
 void writer::write_state(int time_step){
   std::flog << "write state @" << time_step;
   ex_put_time(exoid, time_step+1, &time_step);
   write_nodal_value(time_step);
+  write_element_value(time_step);
   std::flog << "... Done"<<std::endl;
 }

@@ -44,6 +44,26 @@ inline void clean_string(std::string* str, char trimed){
   //str->erase(remove(str->begin(), str->end(), '\n'), str->end());
 }
 
+inline std::vector<string> split_string(std::string& str, char delimiter){
+  std::vector<string> val;
+  string tmp="";
+  for(int i=0;i<str.size();i++){
+    if(str[i]==delimiter){
+      if(tmp!=""){
+        val.push_back(tmp);
+        tmp="";
+      }
+    }else{
+      tmp+=str[i];
+    }
+  }
+  if(tmp!=""){
+    val.push_back(tmp);
+    tmp="";
+  }
+  return val;
+}
+
 inline std::string push_param(std::string* str){
   size_t ind = str->find(',');
   if(ind == std::string::npos){
